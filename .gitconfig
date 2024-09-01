@@ -1,0 +1,11 @@
+[core]
+	compression = 0
+	autocrlf = input
+[http]
+	postBuffer = 1048576000
+	proxy = http://127.0.0.1:7897
+[user]
+	name = hsn
+	email = huangxichao@harmonycloud.cn
+[https]
+	proxy = http://127.0.0.1:7897
