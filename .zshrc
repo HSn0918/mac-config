@@ -4,11 +4,17 @@ export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:/usr/local/mysql/bin
 export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 export CLICOLOR=1
 export LSCOLORS=ExGxFxdaCxDaDahbadeche
+export BUILDKIT_NO_CLIENT_TOKEN=true
 export PATH="/opt/homebrew/opt/openjdk@11/bin:$PATH"
 export PATH="/opt/homebrew/opt/icu4c/bin:$PATH"
 export PATH="/opt/homebrew/opt/icu4c/sbin:$PATH"
+export JAVA_HOME=/Users/hsn/Library/Java/JavaVirtualMachines/graalvm-jdk-23.0.1/Contents/Home
+export PATH=$JAVA_HOME/bin:$PATH
+export PATH="$GRAALVM_HOME/bin:$PATH"
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 . "$HOME/.cargo/env"
 ZSH_THEME="robbyrussell"
@@ -18,8 +24,12 @@ plugins=(
     zsh-autosuggestions
     zsh-syntax-highlighting
     vscode
+    emoji-clock
+    aliases
+    web-search
 )
 source $ZSH/oh-my-zsh.sh
+setopt CORRECT_ALL
 alias bashconfig="vim ~/.bashfile"
 alias zshconfig="vim ~/.zshrc"
 alias vimconfig="vim ~/.vimrc"
@@ -30,6 +40,8 @@ source <(kubectl completion zsh)
 source <(minikube completion zsh)
 source <(kubecm completion zsh)
 source <(cue completion zsh)
+source <(helm completion zsh)
+compdef kubecolor=kubectl
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
@@ -110,6 +122,7 @@ alias tf='tail -f '
 ## 16 - etcd
 alias etcdc='etcdctl'
 ## 17 - kubernetes
+alias kubectl="kubecolor"
 alias kc='kubecm'
 alias k="kubectl"
 alias kgp='kubectl get pod'
@@ -139,7 +152,7 @@ setopt hist_ignore_space
 alias cd=" cd"
 alias ls=" ls"
 # ip
-alias ip='osascript -e "IPv4 address of (system info)"'
+alias ip='ipconfig getifaddr en0'
 # dtm
 alias dtm='dtm -c /opt/homebrew/etc/dtm.yml'
 # vim 快速打开文件
@@ -169,7 +182,7 @@ alias -s txt='vim'      # 文本文件
 alias -s h='vim'        # C/C++ 头文件
 alias -s cpp='vim'      # C++ 文件
 alias -s ts='vim'       # TypeScript 文件
-# git commit 
+# git commit
 # 今天统计
 alias daygit='git log --author="hsn" --since="1 day ago" --pretty=tformat: --numstat -- . ":(exclude)vendor" ":(exclude)static/bower_components" | \
 awk '\''{ add += $1; subs += $2; loc += $1 - $2 } END { printf "今天git增加了 %s 行, 删除了 %s 行, 总共修改了 %s 行\n", add, subs, loc }'\'''
