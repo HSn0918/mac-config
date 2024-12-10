@@ -4,6 +4,7 @@ export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:/usr/local/mysql/bin
 export NVM_DIR="$HOME/.nvm"
+export SHELL=$(which zsh)
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 export CLICOLOR=1
@@ -124,7 +125,9 @@ alias etcdc='etcdctl'
 ## 17 - kubernetes
 alias kubectl="kubecolor"
 alias kc='kubecm'
+alias kcs='kubecm switch'
 alias k="kubectl"
+alias kk='kubectl kui'
 alias kgp='kubectl get pod'
 alias ks='kubectl -n kube-system'
 alias kt='kubectl top'
@@ -142,6 +145,9 @@ alias kdp="kubectl describe pod"
 alias kdd="kubectl describe deployment"
 alias kds="kubectl describe service"
 alias kdn="kubectl describe node"
+alias ke="kubectl edit"
+alias ktpm="kubectl top pod --all-namespaces --sort-by=memory"
+alias ktpc="kubectl top pod --all-namespaces --sort-by=cpu"
 # minikube
 # head and tail and sed
 alias sed='sed -n'
