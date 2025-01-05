@@ -10,10 +10,11 @@ export SHELL=$(which zsh)
 export CLICOLOR=1
 export LSCOLORS=ExGxFxdaCxDaDahbadeche
 export BUILDKIT_NO_CLIENT_TOKEN=true
-export PATH="/opt/homebrew/opt/openjdk@11/bin:$PATH"
+#export PATH="/opt/homebrew/opt/openjdk@11/bin:$PATH"
 export PATH="/opt/homebrew/opt/icu4c/bin:$PATH"
 export PATH="/opt/homebrew/opt/icu4c/sbin:$PATH"
-export JAVA_HOME=/Users/hsn/Library/Java/JavaVirtualMachines/graalvm-jdk-23.0.1/Contents/Home
+#export JAVA_HOME=/Users/hsn/Library/Java/JavaVirtualMachines/graalvm-jdk-23.0.1/Contents/Home
+export JAVA_HOME="/opt/homebrew/opt/openjdk@11"
 export PATH=$JAVA_HOME/bin:$PATH
 export PATH="$GRAALVM_HOME/bin:$PATH"
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
@@ -30,7 +31,8 @@ plugins=(
     web-search
 )
 source $ZSH/oh-my-zsh.sh
-setopt CORRECT_ALL
+unsetopt correct
+unsetopt correct_all
 alias bashconfig="vim ~/.bashfile"
 alias zshconfig="vim ~/.zshrc"
 alias vimconfig="vim ~/.vimrc"
@@ -120,6 +122,7 @@ alias j='jobs -l'
 alias ping="time ping"
 alias nocomment='grep -Ev "^(#|$)"'
 alias tf='tail -f '
+alias clear='clear && clear'
 ## 16 - etcd
 alias etcdc='etcdctl'
 ## 17 - kubernetes
@@ -131,6 +134,7 @@ alias kk='kubectl kui'
 alias kgp='kubectl get pod'
 alias ks='kubectl -n kube-system'
 alias kt='kubectl top'
+alias ktn='kubectl top node'
 alias kl='kubectl logs'
 alias ksl='kubectl -n kube-system logs'
 alias kst='kubectl -n kube-system top'
