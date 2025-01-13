@@ -54,6 +54,10 @@ require("lazy").setup({
             "hrsh7th/cmp-buffer",
             "hrsh7th/cmp-path",
             "hrsh7th/cmp-cmdline",
+            "saadparwaiz1/cmp_luasnip", -- LuaSnip 的补全支持
+            "hrsh7th/cmp-nvim-lsp-signature-help", -- 函数签名补全
+            "hrsh7th/cmp-emoji", -- Emoji 补全
+            "hrsh7th/cmp-nvim-lua", -- Lua 补全（用于 Neovim 配置）
         },
         config = function()
             require("config.nvim-cmp")
@@ -103,10 +107,6 @@ require("lazy").setup({
         desc = "Go Impl",
         },
     },
-   },
-   {
-    "folke/noice.nvim",
-    requires = { "MunifTanjim/nui.nvim", "rcarriga/nvim-notify" },
    }
 })
 
@@ -191,5 +191,32 @@ require("nvim-treesitter.configs").setup({
                 ["ic"] = "@class.inner",    -- 选择类内部
             },
         },
+    },
+})
+
+local cmp = require("cmp")
+
+cmp.setup({
+    mapping = {
+        ["<C-Space>"] = cmp.mapping.complete(), -- 手动触发补全
+        ["<A-CR>"] = cmp.mapping.confirm({ select = true }), -- Option + Enter 确认补全
+        ["<Tab>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+                cmp.select_next_item()
+            elseif require("luasnip").expand_or_jumpable() then
+                require("luasnip").expand_or_jump()
+            else
+                fallback()
+            end
+        end, { "i", "s" }),
+        ["<S-Tab>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+                cmp.select_prev_item()
+            elseif require("luasnip").jumpable(-1) then
+                require("luasnip").jump(-1)
+            else
+                fallback()
+            end
+        end, { "i", "s" }),
     },
 })

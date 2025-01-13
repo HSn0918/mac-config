@@ -48,7 +48,7 @@ vim.keymap.set("n", "<leader>q!", ":q!<CR>", opts) -- 强制退出
 -- 快速退出
 vim.keymap.set('n', 'q', ':qa<CR>', opts)
 vim.keymap.set('n', 'qq', ':q!<CR>', opts)
-vim.keymap.set('n', 'ww', ':w<CR>', opts)
+vim.keymap.set('n', 'W', ':w<CR>', opts)
 vim.keymap.set('n', 'Q', ':qa!<CR>', opts)
 
 -- 上下滚动
@@ -78,7 +78,7 @@ vim.keymap.set('n', '<C-f>', ':Telescope live_grep<CR>', opts) -- 全局搜索
 
 -- kubectl
 vim.keymap.set("n", "<leader>k", '<cmd>lua require("kubectl").toggle()<cr>', { noremap = true, silent = true })
-
+vim.keymap.set('n', ';', ':', { noremap = true, silent = false })
 -----------------
 -- 插入模式 --
 -----------------
@@ -89,6 +89,7 @@ vim.keymap.set('i', 'kj', '<ESC>', opts)
 -- 插入模式下快速跳转
 vim.keymap.set('i', '<C-b>', '<ESC>I', opts) -- 跳到行首
 vim.keymap.set('i', '<C-e>', '<ESC>A', opts) -- 跳到行尾
+vim.keymap.set("i", "<A-CR>", "<C-Space>", { noremap = true, silent = true })
 
 -----------------
 -- 可视模式 --
@@ -130,3 +131,4 @@ vim.api.nvim_set_keymap(
     ":GoImplOpen<CR>", -- 执行命令
     { noremap = true, silent = true } -- 选项
 )
+-- 绑定 Option + Enter 为补全触发快捷键
