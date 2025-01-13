@@ -21,6 +21,18 @@ vim.keymap.set('n', '<C-Right>', ':vertical resize +2<CR>', opts)
 vim.keymap.set('n', 'sv', ':vsp<CR>', opts) -- 垂直分屏
 vim.keymap.set('n', 'sh', ':sp<CR>', opts) -- 水平分屏
 
+-- Mac 下option + hjkl  窗口之间跳转
+vim.keymap.set("n", "∑", "<C-w>w", opt)
+vim.keymap.set("n", "˙", "<C-w>h", opt)
+vim.keymap.set("n", "∆", "<C-w>j", opt)
+vim.keymap.set("n", "˚", "<C-w>k", opt)
+vim.keymap.set("n", "¬", "<C-w>l", opt)
+-- Mac 下option + hjkl  左右移动
+vim.keymap.set("i", "˙", "<Left>", opt)
+vim.keymap.set("i", "∆", "<Down>", opt)
+vim.keymap.set("i", "˚", "<Up>", opt)
+vim.keymap.set("i", "¬", "<Right>", opt)
+
 -- 关闭窗口
 vim.keymap.set('n', 'sc', '<C-w>c', opts) -- 关闭当前窗口
 vim.keymap.set('n', 'so', '<C-w>o', opts) -- 关闭其他窗口
@@ -109,3 +121,12 @@ vim.keymap.set('n', '<C-Up>', ':resize -2<CR>', opts)
 vim.keymap.set('n', '<C-Down>', ':resize +2<CR>', opts)
 vim.keymap.set('n', '<C-Left>', ':vertical resize -2<CR>', opts)
 vim.keymap.set('n', '<C-Right>', ':vertical resize +2<CR>', opts)
+
+
+-- 绑定快捷键 leader + i 执行 GoImplOpen
+vim.api.nvim_set_keymap(
+    "n", -- 普通模式
+    "<leader>i", -- 快捷键
+    ":GoImplOpen<CR>", -- 执行命令
+    { noremap = true, silent = true } -- 选项
+)
