@@ -31,6 +31,7 @@ plugins=(  # 加载的插件列表
     tmux                 # 提供 tmux 支持和快捷键补全
     fzf                  # 使用 fzf 进行模糊搜索和导航
     macos
+    autojump
 )
 
 

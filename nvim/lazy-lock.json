@@ -4,6 +4,7 @@
   "cmp-cmdline": { "branch": "main", "commit": "d250c63aa13ead745e3a40f61fdd3470efde3923" },
   "cmp-nvim-lsp": { "branch": "main", "commit": "99290b3ec1322070bcfb9e846450a46f6efa50f0" },
   "cmp-path": { "branch": "main", "commit": "91ff86cd9c29299a64f968ebb45846c485725f23" },
+  "kubectl.nvim": { "branch": "main", "commit": "159cbdcd06a9205cf08c37606b229f5d916247b1" },
   "lazy.nvim": { "branch": "main", "commit": "d8f26efd456190241afd1b0f5235fe6fdba13d4a" },
   "lspkind.nvim": { "branch": "master", "commit": "d79a1c3299ad0ef94e255d045bed9fa26025dab6" },
   "lualine.nvim": { "branch": "master", "commit": "2a5bae925481f999263d6f5ed8361baef8df4f83" },

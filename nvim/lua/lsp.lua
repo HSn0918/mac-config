@@ -65,7 +65,6 @@ local servers = {
         settings = {
             yaml = {
                 schemas = {
-                    ["https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.22.0-standalone-strict/all.json"] = "*.k8s.yaml",
                     kubernetes = "*.yaml", -- 匹配所有 YAML 文件
                 },
                 validate = true, -- 启用验证
