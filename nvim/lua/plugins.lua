@@ -18,6 +18,28 @@ vim.opt.rtp:prepend(lazypath)
 
 -- 加载 Lazy.nvim 插件管理器
 require("lazy").setup({
+     {
+        "folke/noice.nvim",
+        event = "VeryLazy",
+        dependencies = {
+            "MunifTanjim/nui.nvim", -- 必需依赖
+            "rcarriga/nvim-notify", -- 消息通知插件（可选但推荐）
+        },
+        config = function()
+            -- Noice 配置
+            require("noice").setup({
+                cmdline = {
+                    enabled = true, -- 启用增强 cmdline
+                    format = {
+                        cmdline = { pattern = "^:", icon = "", lang = "vim" },
+                    },
+                },
+                messages = {
+                    enabled = true, -- 显示消息增强
+                },
+            })
+        end,
+    },
     -- Vscode 风格的图标
     {
         "onsails/lspkind.nvim",
@@ -62,6 +84,30 @@ require("lazy").setup({
     "neovim/nvim-lspconfig",
     "b0o/schemastore.nvim",
     "windwp/nvim-autopairs",
+   {
+    "fang2hou/go-impl.nvim",
+    ft = "go",
+    dependencies = {
+        "MunifTanjim/nui.nvim",
+        "ibhagwan/fzf-lua",
+        "nvim-lua/plenary.nvim",
+    },
+    opts = {},
+    keys = {
+        {
+        "<leader>Gi",
+        function()
+            require("go-impl").open()
+        end,
+        mode = { "n" },
+        desc = "Go Impl",
+        },
+    },
+   },
+   {
+    "folke/noice.nvim",
+    requires = { "MunifTanjim/nui.nvim", "rcarriga/nvim-notify" },
+   }
 })
 
 -- 配置主题
@@ -146,11 +192,4 @@ require("nvim-treesitter.configs").setup({
             },
         },
     },
-})
--- 保存时自动格式化
-vim.api.nvim_create_autocmd("BufWritePre", {
-    pattern = "*",
-    callback = function()
-        vim.lsp.buf.format({ async = true })
-    end,
 })
