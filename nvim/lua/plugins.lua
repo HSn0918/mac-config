@@ -42,6 +42,13 @@ require("lazy").setup({
         "L3MON4D3/LuaSnip",
         version = "v2.*",
     },
+    -- 代码片段补全
+    {
+    "ramilito/kubectl.nvim",
+    config = function()
+      require("kubectl").setup()
+    end,
+    },
     -- Theme
     "tanvirtin/monokai.nvim",
     "nvim-lualine/lualine.nvim",
