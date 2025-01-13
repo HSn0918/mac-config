@@ -49,11 +49,53 @@ local servers = {
             },
         },
     },
-    rust_analyzer = {},       -- Rust
+    rust_analyzer = {
+        settings = {
+            ["rust-analyzer"] = {
+                cargo = {
+                    allFeatures = true, -- 启用所有 Cargo 功能
+                },
+                checkOnSave = {
+                    command = "clippy", -- 使用 Clippy 进行代码检查
+                },
+                assist = {
+                    importGranularity = "module", -- 控制导入粒度
+                    importPrefix = "by_self", -- 使用 `self` 作为模块导入前缀
+                },
+                diagnostics = {
+                    enable = true, -- 启用诊断信息
+                },
+                inlayHints = {
+                    enable = true, -- 启用内联提示
+                    typeHints = true,
+                    chainingHints = true,
+                    parameterHints = true,
+                },
+                lens = {
+                    enable = true, -- 启用代码镜头（如测试运行按钮）
+                },
+            },
+        },
+    },
     gopls = {
         settings = {
             gopls = {
-                gofumpt = true, -- 启用更严格的格式化规则
+                usePlaceholders = true,  -- 在补全中插入占位符
+                completeUnimported = true, -- 自动补全未导入的包并添加 import
+                staticcheck = true,       -- 启用静态分析
+                analyses = {
+                    unusedparams = true,  -- 检查未使用的参数
+                    shadow = true,        -- 检查变量遮蔽问题
+                },
+                hints = {
+                    assignVariableTypes = true, -- 提示变量赋值类型
+                    compositeLiteralFields = true, -- 提示复合文字中的字段
+                    compositeLiteralTypes = true,  -- 提示复合文字的类型
+                    constantValues = true,         -- 提示常量值
+                    functionTypeParameters = true, -- 提示函数类型参数
+                    parameterNames = true,         -- 提示参数名
+                    rangeVariableTypes = true,     -- 提示范围变量的类型
+                },
             },
         },
     },
