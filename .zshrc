@@ -98,23 +98,97 @@ alias ss='sudo ss -tuln'  # 检查监听端口
 alias ip='ipconfig getifaddr en0'
 
 ## 7. Kubernetes 命令
-alias kubectl="kubecolor"
-alias kc='kubecm'
-alias kcs='kubecm switch'
+# 基础 kubectl 别名
 alias k="kubectl"
 alias kg="kubectl get"
 alias kgp="kubectl get pods"
 alias kgpo="kubectl get pods"
-alias kgn="kubectl get nodes -o wide"
-alias kgd="kubectl get deployment -o wide"
-alias kgs="kubectl get svc -o wide"
+alias kgn="kubectl get nodes"
+alias kgnw="kubectl get nodes -o wide"
+alias kgd="kubectl get deployment"
+alias kgdw="kubectl get deployment -o wide"
+alias kgs="kubectl get svc"
+alias kgsw="kubectl get svc -o wide"
+
+# 描述资源
 alias kdp="kubectl describe pod"
 alias kdd="kubectl describe deployment"
 alias kds="kubectl describe service"
 alias kdn="kubectl describe node"
+
+# 编辑资源
 alias ke="kubectl edit"
+
+# 监控资源
 alias ktpm="kubectl top pod --all-namespaces --sort-by=memory"
 alias ktpc="kubectl top pod --all-namespaces --sort-by=cpu"
+
+# kube-system 命名空间
+alias ks="kubectl -n kube-system"
+alias ksg="kubectl -n kube-system get"
+alias ksgp="kubectl -n kube-system get pods"
+alias ksgpo="kubectl -n kube-system get pods"
+alias ksgd="kubectl -n kube-system get deployment"
+
+# 日志相关
+alias kl="kubectl logs"
+alias klf="kubectl logs -f"
+alias klf1="kubectl logs -f --tail=1"
+alias klf10="kubectl logs -f --tail=10"
+alias klf100="kubectl logs -f --tail=100"
+alias klp="kubectl logs -p"
+alias klt="kubectl logs --tail=50"
+
+# 资源管理操作
+alias ka="kubectl apply -f"
+alias kd="kubectl delete"
+alias kc="kubectl create -f"
+alias kr="kubectl rollout restart"
+alias krd="kubectl rollout status deployment"
+
+# 配置相关
+alias kns="kubectl config set-context --current --namespace"
+
+# 事件相关
+alias kge="kubectl get events --sort-by='.lastTimestamp'"
+
+# 监控资源变化
+alias kw="kubectl get --watch"
+alias kgwl="kubectl get pods -o wide --watch"
+
+# 自定义资源定义（CRD）
+alias kgcrd="kubectl get crd"
+
+# 高级别名（与 grep 和 jq 结合）
+alias kgjp="kubectl get pods -o json | jq"
+alias kgjd="kubectl get deployment -o json | jq"
+
+# 快速清理失败的 Pod
+alias kdfp="kubectl delete pod --field-selector=status.phase=Failed"
+
+# 快速重启 namespace 中的所有 pods
+alias kres="kubectl rollout restart deployment"
+
+# 结合 kubecolor 美化输出
+alias kubectl="kubecolor"
+
+# 结合 kubecm 工具
+alias kc='kubecm'
+alias kcs='kubecm switch'
+
+# 查看所有 context
+alias kctx="kubectl config get-contexts"
+alias kcx="kubectl config use-context"
+
+# 快速查看所有 namespace
+alias kgns="kubectl get namespaces"
+
+# 配置 kubeconfig 快捷查看
+alias kcfg="kubectl config view --minify"
+
+# 动态资源监控
+alias ktw="kubectl top --watch"
+alias ktn="kubectl top nodes"
 
 ## 8. Docker 命令
 alias dps='docker ps'  # 查看运行中的容器
