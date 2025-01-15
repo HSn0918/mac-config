@@ -187,7 +187,6 @@ alias kgns="kubectl get namespaces"
 alias kcfg="kubectl config view --minify"
 
 # 动态资源监控
-alias ktw="kubectl top --watch"
 alias ktn="kubectl top nodes"
 
 ## 8. Docker 命令
