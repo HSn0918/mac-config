@@ -37,6 +37,7 @@ plugins=(  # 加载的插件列表
 
 source $ZSH/oh-my-zsh.sh  # 加载 Oh My Zsh
 
+export EDITOR="nvim"
 # Shell 和颜色设置
 export SHELL=$(which zsh)  # 设置默认 shell 为 Zsh
 export CLICOLOR=1  # 启用颜色显示
@@ -78,7 +79,7 @@ alias timestamp='now; echo s: $(date +"%s"); echo ms: $(expr $(date +%s%N) / 100
 
 ## 4. 安全设置（危险命令加确认）
 alias mv='mv -i'  # 移动文件前确认
-alias cp='cp -i'  # 复制文件前确认
+alias cp='cp -ir'  # 复制文件前确认
 alias ln='ln -i'  # 创建链接前确认
 alias rm='rm -i'  # 删除文件前确认
 
@@ -141,7 +142,7 @@ alias klt="kubectl logs --tail=50"
 
 # 资源管理操作
 alias ka="kubectl apply -f"
-alias kd="kubectl delete"
+alias kdel="kubectl delete"
 alias kc="kubectl create -f"
 alias kr="kubectl rollout restart"
 alias krd="kubectl rollout status deployment"
@@ -176,6 +177,8 @@ alias kubectl="kubecolor"
 alias kc='kubecm'
 alias kcs='kubecm switch'
 
+# kubefwd
+alias kf='kubefwd'
 # 查看所有 context
 alias kctx="kubectl config get-contexts"
 alias kcx="kubectl config use-context"
@@ -189,6 +192,9 @@ alias kcfg="kubectl config view --minify"
 # 动态资源监控
 alias ktn="kubectl top nodes"
 
+alias badnode='kubectl get nodes -o jsonpath='\''{range .items[*]}{.metadata.name}{"\t"}{.status.conditions[?(@.type=="Ready")].status}{"\t"}{.status.addresses[?(@.type=="InternalIP")].address}{"\n"}{end}'\'' | awk -F'\''\t'\'' '\''$2 != "True" {print $3}'\'
+# kubevpn
+alias kv="kubevpn"
 ## 8. Docker 命令
 alias dps='docker ps'  # 查看运行中的容器
 alias di='docker images'  # 查看镜像
@@ -213,8 +219,8 @@ alias py='python3'  # 简化 Python3 调用
 alias code='code .'  # 打开 VSCode 当前目录
 alias vimdiff='vim -d'  # 使用 vim 比较文件差异
 alias vim='nvim'  # 使用 nvim 替代 vim
+alias clear='clear && clear'
 # 文件类型快捷打开方式
-alias -s sh='vim'      # Shell 脚本
 alias -s php='vim'     # PHP 文件
 alias -s css='vim'     # CSS 样式文件
 alias -s scss='vim'    # SCSS 样式文件
@@ -263,9 +269,14 @@ source <(goctl completion zsh)
 source <(kubectl completion zsh)
 source <(minikube completion zsh)
 source <(kubecm completion zsh)
-source <(cue completion zsh)
 source <(helm completion zsh)
+source <(eksctl completion zsh)
+source <(kubevpn completion zsh)
+source <(kubefwd completion zsh)
 compdef kubecolor=kubectl
 function command_not_found_handle {
     echo "Command not found. Skipping..." > /dev/null
 }
+
+
+. "$HOME/.local/bin/env"
