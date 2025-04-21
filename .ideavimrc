@@ -1,17 +1,143 @@
+" ====================
+" 基础设置
+" ====================
+let mapleader = " "
 
-"leader
-let leader = " "
+" 插件设置
+set surround
+set multiple-cursors
+set commentary
+set easymotion
+set highlightedyank
+set nerdtree
+set which-key
+set ideajoin
 
+" ====================
+" 基本配置
+" ====================
+set encoding=utf-8
+set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
+set termencoding=utf-8
+set ffs=unix,dos,mac
 
+" 界面设置
+set number
+set relativenumber
+set cursorline
+set showmode
+set showcmd
+set showmatch
+set matchtime=2
+set scrolloff=7
+set nowrap
 
-call plug#end()
+" 搜索设置
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
 
-" theme
+" 编辑体验
+set history=2000
+set clipboard+=unnamed
+set clipboard=unnamed
+set nobackup
+set novisualbell
+set noerrorbells
+set visualbell t_vb=
+
+" 缩进设置
+set autoindent
+set shiftwidth=4
+set expandtab
+set smartindent
+
+" ====================
+" 快捷键映射
+" ====================
+" 基础映射
+inoremap jk <Esc>
+inoremap kj <Esc>
+noremap ; :
+
+" 行首行尾
+nnoremap H ^
+nnoremap L $
+vnoremap H ^
+vnoremap L $
+
+" 窗口操作
+map <leader>j <C-W>j
+map <leader>k <C-W>k
+map <leader>h <C-W>h
+map <leader>l <C-W>l
+
+" 分屏操作
+noremap sk :set nosplitbelow<CR>:split<CR>:set splitbelow<CR>
+noremap sj :set splitbelow<CR>:split<CR>
+noremap sh :set nosplitright<CR>:vsplit<CR>:set splitright<CR>
+noremap sl :set splitright<CR>:vsplit<CR>
+
+" 分屏大小调整
+noremap <leader><up> :res +5<CR>
+noremap <leader><down> :res -5<CR>
+noremap <leader><left> :vertical resize-5<CR>
+noremap <leader><right> :vertical resize+5<CR>
+
+" 标签页操作
+noremap tt :tabe<CR>
+noremap tn :-tabnext<CR>
+noremap ti :+tabnext<CR>
+
+" 复制粘贴
+noremap <Leader>y "*y
+noremap <Leader>p "*p
+vnoremap Y "+y
+
+" 其他实用映射
+noremap <leader>q <C-w>j:q<CR>
+noremap <leader>w :NERDTreeToggle<CR>
+noremap <leader>/ :set splitbelow<CR>:split<CR>:res +10<CR>:term<CR>
+noremap <leader>sw :set wrap<CR>
+
+" 命令模式增强
+cnoremap <C-j> <t_kd>
+cnoremap <C-k> <t_ku>
+cnoremap <C-a> <Home>
+cnoremap <C-e> <End>
+
+" 缩进后保持选中
+vnoremap < <gv
+vnoremap > >gv
+
+" ====================
+" IDE 特定设置
+" ====================
+" 使用 IDE 的功能
+set ideajoin
+set idearefactormode=keep
+
+" 重构
+map <leader>r :action RenameElement<CR>
+map <leader>f :action ReformatCode<CR>
+map <leader>d :action GotoDeclaration<CR>
+map <leader>u :action FindUsages<CR>
+map <leader>i :action GotoImplementation<CR>
+
+" 调试
+map <leader>b :action ToggleLineBreakpoint<CR>
+map <leader>c :action Resume<CR>
+map <leader>n :action StepOver<CR>
+map <leader>s :action StepInto<CR>
+
+" ====================
+" 其他设置
+" ====================
+" 主题设置
 syntax on
 set t_Co=256
-set cursorline
 set background=dark
-set number
 " True Color Theme
 if exists('+termguicolors')
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
@@ -23,60 +149,20 @@ color space-vim-dark
 let g:airline_theme = 'one'
 let g:space_vim_dark_background = 233
 
-
-" history : how many lines of history VIM has to remember
-set history=2000
-set clipboard+=unnamed
-
-set guioptions-=L
-
-" filetype
+" 文件类型设置
 filetype on
 " Enable filetype plugins
 filetype plugin on
 filetype indent on
 
-
-" base
-set nocompatible                " don't bother with vi compatibility
-set magic                       " For regular expressions turn magic on
-set title                       " change the terminal's title
-set nobackup                    " do not keep a backup file
-
-set novisualbell                " turn off visual bell
-set noerrorbells                " don't beep
-set visualbell t_vb=            " turn off error beep/flash
-
-
-
-" movement
-set scrolloff=7                 " keep 3 lines when scrolling
-
-" show
-set number                      " show line numbers
-set nowrap
-set showcmd                     " display incomplete commands
-set showmode                    " display current modes
-set showmatch                   " jump to matches when entering parentheses
-set matchtime=2                 " tenths of a second to show the matching parenthesis
-
-
-" search
-set hlsearch                    " highlight searches
-set incsearch                   " do incremental searching, search as you type
-set ignorecase                  " ignore case when searching
-set smartcase                   " no ignorecase if Uppercase char present
-
-" encoding
-set encoding=utf-8
-set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
-set termencoding=utf-8
-set ffs=unix,dos,mac
+" 其他设置
+set guioptions-=L
+set title
+set magic
 set formatoptions+=m
 set formatoptions+=B
 
-
-" select & complete
+" 选择和完成设置
 set selection=inclusive
 set selectmode=mouse,key
 set completeopt=longest,menu
@@ -84,105 +170,48 @@ set wildmenu                           " show a navigable menu for tab completio
 set wildmode=longest,list,full
 set wildignore=*.o,*~,*.pyc,*.class
 
-
-"Gui setting
-
+" GUI 设置
 set guifont=Menlo\ Regular:h12
 
-
-" Key Mapping
-noremap ; :
-
-
-nnoremap L $
-nnoremap H ^
-vnoremap L $
-vnoremap H ^
-nnoremap ; :
-
-
-" Copy to system clipboard
-noremap <Leader>y "*y
-noremap <Leader>p "*p
-vnoremap Y "+y
-
-
-nnoremap gev :w $MYVIMRC<CR>
-nnoremap gsv :so $MYVIMRC<CR>
-
-nnoremap k gk
-nnoremap gk k
-nnoremap j gj
-nnoremap gj j
-
-map <LEADER>j <C-W>j
-map <LEADER>k <C-W>k
-map <LEADER>h <C-W>h
-map <LEADER>l <C-W>l
-
+" 快捷键映射
 nnoremap <F2> :set nu! nu?<CR>
 nnoremap <F3> :set list! list?<CR>
 nnoremap <F4> :set wrap! wrap?<CR>
-"jk 替换 Esc
-inoremap jk <Esc>
-inoremap kj <Esc>
-" Swap implementations of ` and ' jump to markers
-" By default, ' jumps to the marked line, ` jumps to the marked line and
-" column, so swap them
+
+" 交换 ` 和 ' 跳转到标记
+" 默认情况下，' 跳转到标记行，` 跳转到标记行和列，所以交换它们
 nnoremap ' `
 nnoremap ` '
 
-"Reselect visual block after indent/outdent.调整缩进后自动选中，方便再次操作
+" 重新选择可视块后缩进/缩出。调整缩进后自动选中，方便再次操作
 vnoremap < <gv
-vnoremap > >g
+vnoremap > >gv
 
-" save
+" 保存
 cmap w!! w !sudo tee >/dev/null %
 
-
-" command mode, ctrl-a to head， ctrl-e to tail
+" 命令模式，ctrl-a 到 head， ctrl-e 到 tail
 cnoremap <C-j> <t_kd>
 cnoremap <C-k> <t_ku>
 cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
 
-" Press <SPACE> + q to close the window below the current window
+" 按 <SPACE> + q 关闭当前窗口下的窗口
 noremap <LEADER>q <C-w>j:q<CR>
-" Disable the default s key
+" 禁用默认 s 键
 noremap s <nop>
 
-" split the screens to up (horizontal), down (horizontal), left (vertical), right (vertical)
+" 将屏幕分割为上（水平）、下（水平）、左（垂直）、右（垂直）
 noremap sk :set nosplitbelow<CR>:split<CR>:set splitbelow<CR>
 noremap sj :set splitbelow<CR>:split<CR>
 noremap sh :set nosplitright<CR>:vsplit<CR>:set splitright<CR>
 noremap sl :set splitright<CR>:vsplit<CR>
 
-noremap <LEADER><up> :res +5<CR>
-noremap <LEADER><<down> :res -5<CR>
-noremap <LEADER><<left> :vertical resize-5<CR>
-noremap <LEADER><<right> :vertical resize+5<CR>
+" 其他设置
+set autoindex
+set shiftwidth=4
+set nu
+set relativenumber
 
-
-" ===
-" === Tab management
-" ===
-" Create a new tab with tt
-noremap tt :tabe<CR>
-" Move around tabs with tn and ti
-noremap tn :-tabnext<CR>
-noremap ti :+tabnext<CR>
-" set wrap
-noremap <LEADER>sw :set wrap<CR>
-" Opening a terminal window
-noremap <LEADER>/ :set splitbelow<CR>:split<CR>:res +10<CR>:term<CR>
-" Vim filer
-
-" Nerd tree
-map <LEADER>w :NERDTreeToggle<CR>
- set clipboard=unnamed
- set autoindex
- set shiftwidth=4
- set nu
- set relativenumber
- " easymotion
+" easymotion
 
