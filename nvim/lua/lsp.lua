@@ -36,43 +36,204 @@ vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
 
 -- 配置语言服务器
 local servers = {
-    pylsp = {},               -- Python
+    -- Python 配置优化
+    pylsp = {
+        settings = {
+            pylsp = {
+                plugins = {
+                    pycodestyle = {
+                        enabled = true,
+                        maxLineLength = 100
+                    },
+                    pylint = {
+                        enabled = true,
+                        executable = "pylint"
+                    },
+                    pyflakes = { enabled = true },
+                    autopep8 = { enabled = true },
+                    yapf = { enabled = true }
+                }
+            }
+        }
+    },
+
+    -- Lua 语言服务器
     lua_ls = {
         settings = {
             Lua = {
+                runtime = {
+                    version = 'LuaJIT',
+                },
                 diagnostics = {
-                    globals = { "vim" }, -- 识别全局变量 vim
+                    globals = {'vim'},
                 },
                 workspace = {
                     library = vim.api.nvim_get_runtime_file("", true),
+                    checkThirdParty = false,
+                },
+                telemetry = {
+                    enable = false,
                 },
             },
         },
     },
+
+    -- TypeScript/JavaScript 配置优化
+    ts_ls = {
+        settings = {
+            typescript = {
+                inlayHints = {
+                    includeInlayParameterNameHints = 'all',
+                    includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                    includeInlayFunctionParameterTypeHints = true,
+                    includeInlayVariableTypeHints = true,
+                    includeInlayPropertyDeclarationTypeHints = true,
+                    includeInlayFunctionLikeReturnTypeHints = true,
+                    includeInlayEnumMemberValueHints = true,
+                },
+            },
+            javascript = {
+                inlayHints = {
+                    includeInlayParameterNameHints = 'all',
+                    includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                    includeInlayFunctionParameterTypeHints = true,
+                    includeInlayVariableTypeHints = true,
+                    includeInlayPropertyDeclarationTypeHints = true,
+                    includeInlayFunctionLikeReturnTypeHints = true,
+                    includeInlayEnumMemberValueHints = true,
+                },
+            },
+        },
+    },
+
+    -- Vue 语言服务器
+    volar = {
+        filetypes = {'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue', 'json'},
+    },
+
+    -- Markdown 语言服务器
+    marksman = {},
+
+    -- SQL 语言服务器
+    sqlls = {},
+
+    -- 保留原有配置
     rust_analyzer = {
         settings = {
             ["rust-analyzer"] = {
                 cargo = {
-                    allFeatures = true, -- 启用所有 Cargo 功能
+                    allFeatures = true,
+                    loadOutDirsFromCheck = true,
+                    runBuildScripts = true,
+                },
+                -- 详细的代码补全设置
+                completion = {
+                    addCallParenthesis = true,
+                    addCallArgumentSnippets = true,
+                    postfix = {
+                        enable = true,
+                    },
+                    autoimport = {
+                        enable = true,
+                    },
+                    fullFunctionSignatures = {
+                        enable = true,
+                    },
                 },
                 checkOnSave = {
-                    command = "clippy", -- 使用 Clippy 进行代码检查
+                    command = "clippy",
+                    extraArgs = {"--all-features"},
                 },
+                -- 增强的代码提示
                 assist = {
-                    importGranularity = "module", -- 控制导入粒度
-                    importPrefix = "by_self", -- 使用 `self` 作为模块导入前缀
+                    importGranularity = "module",
+                    importPrefix = "by_self",
                 },
+                -- 诊断设置
                 diagnostics = {
-                    enable = true, -- 启用诊断信息
+                    enable = true,
+                    experimental = {
+                        enable = true,
+                    },
                 },
+                -- 悬停提示设置
+                hover = {
+                    actions = {
+                        enable = true,
+                        debug = true,
+                        gotoTypeDef = true,
+                        implementations = true,
+                        run = true,
+                    },
+                    documentation = {
+                        enable = true,
+                        keywords = true,
+                    },
+                },
+                -- 内联提示设置
                 inlayHints = {
-                    enable = true, -- 启用内联提示
-                    typeHints = true,
-                    chainingHints = true,
-                    parameterHints = true,
+                    enable = true,
+                    bindingModeHints = {
+                        enable = true,
+                    },
+                    chainingHints = {
+                        enable = true,
+                    },
+                    closingBraceHints = {
+                        enable = true,
+                        minLines = 1,
+                    },
+                    closureReturnTypeHints = {
+                        enable = "always",
+                    },
+                    lifetimeElisionHints = {
+                        enable = "always",
+                        useParameterNames = true,
+                    },
+                    maxLength = 25,
+                    parameterHints = {
+                        enable = true,
+                    },
+                    reborrowHints = {
+                        enable = "always",
+                    },
+                    typeHints = {
+                        enable = true,
+                        hideClosureInitialization = false,
+                        hideNamedConstructor = false,
+                    },
                 },
+                -- 代码镜头设置
                 lens = {
-                    enable = true, -- 启用代码镜头（如测试运行按钮）
+                    enable = true,
+                    debug = {
+                        enable = true,
+                    },
+                    implementations = {
+                        enable = true,
+                    },
+                    run = {
+                        enable = true,
+                    },
+                    references = {
+                        adt = {
+                            enable = true,
+                        },
+                        enumVariant = {
+                            enable = true,
+                        },
+                        method = {
+                            enable = true,
+                        },
+                        trait = {
+                            enable = true,
+                        },
+                    },
+                },
+                -- 过程宏支持
+                procMacro = {
+                    enable = true,
+                    ignored = {},
                 },
             },
         },
@@ -80,24 +241,96 @@ local servers = {
     gopls = {
         settings = {
             gopls = {
-                usePlaceholders = true,  -- 在补全中插入占位符
-                completeUnimported = true, -- 自动补全未导入的包并添加 import
-                staticcheck = true,       -- 启用静态分析
+                -- 基础设置
+                usePlaceholders = true,
+                completeUnimported = true,
+                directoryFilters = {"-node_modules"},
+
+                -- 代码分析设置
                 analyses = {
-                    unusedparams = true,  -- 检查未使用的参数
-                    shadow = true,        -- 检查变量遮蔽问题
+                    unusedparams = true,
+                    shadow = true,
+                    fieldalignment = true,
+                    nilness = true,
+                    unusedwrite = true,
+                    useany = true,
                 },
+
+                -- 代码建议设置
                 hints = {
-                    assignVariableTypes = true, -- 提示变量赋值类型
-                    compositeLiteralFields = true, -- 提示复合文字中的字段
-                    compositeLiteralTypes = true,  -- 提示复合文字的类型
-                    constantValues = true,         -- 提示常量值
-                    functionTypeParameters = true, -- 提示函数类型参数
-                    parameterNames = true,         -- 提示参数名
-                    rangeVariableTypes = true,     -- 提示范围变量的类型
+                    assignVariableTypes = true,
+                    compositeLiteralFields = true,
+                    compositeLiteralTypes = true,
+                    constantValues = true,
+                    functionTypeParameters = true,
+                    parameterNames = true,
+                    rangeVariableTypes = true,
                 },
+
+                -- 诊断设置
+                diagnosticsDelay = "500ms",
+                semanticTokens = true,
+
+                -- 代码补全设置
+                matcher = "Fuzzy",
+                experimentalPostfixCompletions = true,
+
+                -- 格式化设置
+                gofumpt = true,
+
+                -- 导入设置
+                importShortcut = "Both",
+
+                -- 代码链接设置
+                linkTarget = "pkg.go.dev",
+
+                -- 代码模板设置
+                templateExtensions = {"tmpl", "gotmpl"},
+
+                -- 符号设置
+                symbolMatcher = "fuzzy",
+                symbolStyle = "Dynamic",
+
+                -- 代码导航设置
+                codelenses = {
+                    gc_details = true,
+                    generate = true,
+                    regenerate_cgo = true,
+                    run_govulncheck = true,
+                    test = true,
+                    tidy = true,
+                    upgrade_dependency = true,
+                    vendor = true,
+                },
+
+                -- 静态检查设置
+                staticcheck = true,
+
+                -- 工作区设置
+                expandWorkspaceToModule = true,
+                experimentalWorkspaceModule = true,
+
+                -- 模块设置
+                allowModfileModifications = true,
+                allowImplicitNetworkAccess = true,
             },
         },
+        -- 确保某些命令在保存时运行
+        on_attach = function(client, bufnr)
+            -- 调用原有的 on_attach
+            on_attach(client, bufnr)
+
+            -- 自动导入
+            local function organize_imports()
+                vim.lsp.buf.code_action({ context = { only = { "source.organizeImports" } }, apply = true })
+            end
+
+            -- 为当前缓冲区创建自动命令
+            vim.api.nvim_create_autocmd("BufWritePre", {
+                callback = organize_imports,
+                buffer = bufnr,
+            })
+        end,
     },
     jdtls = {},               -- Java
     bashls = {},              -- Shell
@@ -113,7 +346,6 @@ local servers = {
             },
         },
     },
-    ts_ls = {},            -- TypeScript/JavaScript
     html = {},                -- HTML
     cssls = {},               -- CSS
     jsonls = {                -- JSON
