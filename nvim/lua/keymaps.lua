@@ -19,19 +19,19 @@ vim.keymap.set('n', '<C-Right>', ':vertical resize +2<CR>', opts)
 
 -- 窗口分屏
 vim.keymap.set('n', 'sv', ':vsp<CR>', opts) -- 垂直分屏
-vim.keymap.set('n', 'sh', ':sp<CR>', opts) -- 水平分屏
+vim.keymap.set('n', 'sh', ':sp<CR>', opts)  -- 水平分屏
 
 -- Mac 下option + hjkl  窗口之间跳转
-vim.keymap.set("n", "∑", "<C-w>w", opt)
-vim.keymap.set("n", "˙", "<C-w>h", opt)
-vim.keymap.set("n", "∆", "<C-w>j", opt)
-vim.keymap.set("n", "˚", "<C-w>k", opt)
-vim.keymap.set("n", "¬", "<C-w>l", opt)
+vim.keymap.set("n", "∑", "<C-w>w", opts)
+vim.keymap.set("n", "˙", "<C-w>h", opts)
+vim.keymap.set("n", "∆", "<C-w>j", opts)
+vim.keymap.set("n", "˚", "<C-w>k", opts)
+vim.keymap.set("n", "¬", "<C-w>l", opts)
 -- Mac 下option + hjkl  左右移动
-vim.keymap.set("i", "˙", "<Left>", opt)
-vim.keymap.set("i", "∆", "<Down>", opt)
-vim.keymap.set("i", "˚", "<Up>", opt)
-vim.keymap.set("i", "¬", "<Right>", opt)
+vim.keymap.set("i", "˙", "<Left>", opts)
+vim.keymap.set("i", "∆", "<Down>", opts)
+vim.keymap.set("i", "˚", "<Up>", opts)
+vim.keymap.set("i", "¬", "<Right>", opts)
 
 -- 关闭窗口
 vim.keymap.set('n', 'sc', '<C-w>c', opts) -- 关闭当前窗口
@@ -42,7 +42,7 @@ vim.keymap.set('n', '<leader>t', ':NvimTreeToggle<CR>', opts)
 vim.keymap.set('n', '<F2>', ':NvimTreeToggle<CR>', opts)
 
 -- 文件操作
-vim.keymap.set("n", "<leader>q", ":wq<CR>", opts) -- 保存并退出
+vim.keymap.set("n", "<leader>q", ":wq<CR>", opts)  -- 保存并退出
 vim.keymap.set("n", "<leader>q!", ":q!<CR>", opts) -- 强制退出
 
 -- 快速退出
@@ -74,7 +74,7 @@ vim.keymap.set('n', '<leader>bc', ':BufferLinePickClose<CR>', opts)
 
 -- Telescope 快捷键
 vim.keymap.set('n', '<C-p>', ':Telescope find_files<CR>', opts) -- 查找文件
-vim.keymap.set('n', '<C-f>', ':Telescope live_grep<CR>', opts) -- 全局搜索
+vim.keymap.set('n', '<C-f>', ':Telescope live_grep<CR>', opts)  -- 全局搜索
 
 -- kubectl
 vim.keymap.set("n", "<leader>k", '<cmd>lua require("kubectl").toggle()<cr>', { noremap = true, silent = true })
@@ -109,12 +109,12 @@ vim.keymap.set('v', 'p', '"_dP', opts)
 -- 终端模式 --
 -----------------
 -- 打开终端
-vim.keymap.set('n', '<leader>s', ':sp | terminal<CR>', opts) -- 水平终端
+vim.keymap.set('n', '<leader>s', ':sp | terminal<CR>', opts)   -- 水平终端
 vim.keymap.set('n', '<leader>vs', ':vsp | terminal<CR>', opts) -- 垂直终端
 
 
 -- 关闭终端
-vim.keymap.set('n', '<leader>x', '<C-w>c', opts) -- 普通模式关闭当前窗口
+vim.keymap.set('n', '<leader>x', '<C-w>c', opts)             -- 普通模式关闭当前窗口
 vim.keymap.set('t', '<leader>x', [[<C-\><C-n><C-w>c]], opts) -- 终端模式直接关闭
 
 -- 调整窗口大小
@@ -126,9 +126,10 @@ vim.keymap.set('n', '<C-Right>', ':vertical resize +2<CR>', opts)
 
 -- 绑定快捷键 leader + i 执行 GoImplOpen
 vim.api.nvim_set_keymap(
-    "n", -- 普通模式
-    "<leader>i", -- 快捷键
-    ":GoImplOpen<CR>", -- 执行命令
+    "n",                              -- 普通模式
+    "<leader>i",                      -- 快捷键
+    ":GoImplOpen<CR>",                -- 执行命令
     { noremap = true, silent = true } -- 选项
 )
 -- 绑定 Option + Enter 为补全触发快捷键
+

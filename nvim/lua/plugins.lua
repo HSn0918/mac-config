@@ -156,7 +156,7 @@ require("nvim-tree").setup({
 require("nvim-treesitter.configs").setup({
     ensure_installed = {
         -- 编程语言
-        "lua", "python", "go", "javascript", "typescript", "json", "html", "css",
+         "python", "go", "javascript", "typescript", "json", "html", "css",
         "bash", "c", "cpp", "java", "rust",
 
         -- 标记语言
