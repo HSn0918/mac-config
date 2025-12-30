@@ -3,14 +3,14 @@ local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
 -- 检查 Lazy.nvim 是否已经安装，如果没有则自动安装
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
-  vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable",
-    lazypath,
-  })
+    vim.fn.system({
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/folke/lazy.nvim.git",
+        "--branch=stable",
+        lazypath,
+    })
 end
 
 -- 将 Lazy.nvim 添加到运行时路径中
@@ -18,7 +18,7 @@ vim.opt.rtp:prepend(lazypath)
 
 -- 加载 Lazy.nvim 插件管理器
 require("lazy").setup({
-     {
+    {
         "folke/noice.nvim",
         event = "VeryLazy",
         dependencies = {
@@ -54,10 +54,10 @@ require("lazy").setup({
             "hrsh7th/cmp-buffer",
             "hrsh7th/cmp-path",
             "hrsh7th/cmp-cmdline",
-            "saadparwaiz1/cmp_luasnip", -- LuaSnip 的补全支持
+            "saadparwaiz1/cmp_luasnip",            -- LuaSnip 的补全支持
             "hrsh7th/cmp-nvim-lsp-signature-help", -- 函数签名补全
-            "hrsh7th/cmp-emoji", -- Emoji 补全
-            "hrsh7th/cmp-nvim-lua", -- Lua 补全（用于 Neovim 配置）
+            "hrsh7th/cmp-emoji",                   -- Emoji 补全
+            "hrsh7th/cmp-nvim-lua",                -- Lua 补全（用于 Neovim 配置）
         },
         config = function()
             require("config.nvim-cmp")
@@ -70,10 +70,13 @@ require("lazy").setup({
     },
     -- 代码片段补全
     {
-    "ramilito/kubectl.nvim",
-    config = function()
-      require("kubectl").setup()
-    end,
+        "ramilito/kubectl.nvim",
+        -- 使用 release tag 以便自动下载预编译的 native 二进制（kubectl_client）
+        version = "2.*",
+        dependencies = "saghen/blink.download",
+        config = function()
+            require("kubectl").setup()
+        end,
     },
     -- Theme
     "tanvirtin/monokai.nvim",
@@ -88,26 +91,26 @@ require("lazy").setup({
     "neovim/nvim-lspconfig",
     "b0o/schemastore.nvim",
     "windwp/nvim-autopairs",
-   {
-    "fang2hou/go-impl.nvim",
-    ft = "go",
-    dependencies = {
-        "MunifTanjim/nui.nvim",
-        "ibhagwan/fzf-lua",
-        "nvim-lua/plenary.nvim",
-    },
-    opts = {},
-    keys = {
-        {
-        "<leader>Gi",
-        function()
-            require("go-impl").open()
-        end,
-        mode = { "n" },
-        desc = "Go Impl",
+    {
+        "fang2hou/go-impl.nvim",
+        ft = "go",
+        dependencies = {
+            "MunifTanjim/nui.nvim",
+            "ibhagwan/fzf-lua",
+            "nvim-lua/plenary.nvim",
         },
-    },
-   }
+        opts = {},
+        keys = {
+            {
+                "<leader>Gi",
+                function()
+                    require("go-impl").open()
+                end,
+                mode = { "n" },
+                desc = "Go Impl",
+            },
+        },
+    }
 })
 
 -- 配置主题
@@ -156,7 +159,7 @@ require("nvim-tree").setup({
 require("nvim-treesitter.configs").setup({
     ensure_installed = {
         -- 编程语言
-         "python", "go", "javascript", "typescript", "json", "html", "css",
+        "python", "go", "javascript", "typescript", "json", "html", "css",
         "bash", "c", "cpp", "java", "rust",
 
         -- 标记语言
@@ -183,7 +186,7 @@ require("nvim-treesitter.configs").setup({
     textobjects = {
         select = {
             enable = true,
-            lookahead = true, -- 光标自动跳转到下一个匹配项
+            lookahead = true,               -- 光标自动跳转到下一个匹配项
             keymaps = {
                 ["af"] = "@function.outer", -- 选择整个函数
                 ["if"] = "@function.inner", -- 选择函数内部
@@ -191,32 +194,5 @@ require("nvim-treesitter.configs").setup({
                 ["ic"] = "@class.inner",    -- 选择类内部
             },
         },
-    },
-})
-
-local cmp = require("cmp")
-
-cmp.setup({
-    mapping = {
-        ["<C-Space>"] = cmp.mapping.complete(), -- 手动触发补全
-        ["<A-CR>"] = cmp.mapping.confirm({ select = true }), -- Option + Enter 确认补全
-        ["<Tab>"] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-                cmp.select_next_item()
-            elseif require("luasnip").expand_or_jumpable() then
-                require("luasnip").expand_or_jump()
-            else
-                fallback()
-            end
-        end, { "i", "s" }),
-        ["<S-Tab>"] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-                cmp.select_prev_item()
-            elseif require("luasnip").jumpable(-1) then
-                require("luasnip").jump(-1)
-            else
-                fallback()
-            end
-        end, { "i", "s" }),
     },
 })

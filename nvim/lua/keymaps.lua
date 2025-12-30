@@ -52,8 +52,6 @@ vim.keymap.set('n', 'W', ':w<CR>', opts)
 vim.keymap.set('n', 'Q', ':qa!<CR>', opts)
 
 -- 上下滚动
-vim.keymap.set('n', '<C-j>', '4j', opts)
-vim.keymap.set('n', '<C-k>', '4k', opts)
 vim.keymap.set('n', '<C-u>', '9k', opts)
 vim.keymap.set('n', '<C-d>', '9j', opts)
 
@@ -64,14 +62,6 @@ vim.keymap.set('n', 'sj', ':resize +10<CR>', opts)
 vim.keymap.set('n', 'sk', ':resize -10<CR>', opts)
 vim.keymap.set('n', 's=', '<C-w>=', opts) -- 等比例调整
 
--- Bufferline 操作
-vim.keymap.set('n', '<C-h>', ':BufferLineCyclePrev<CR>', opts)
-vim.keymap.set('n', '<C-l>', ':BufferLineCycleNext<CR>', opts)
-vim.keymap.set('n', '<C-w>', ':Bdelete!<CR>', opts)
-vim.keymap.set('n', '<leader>bl', ':BufferLineCloseRight<CR>', opts)
-vim.keymap.set('n', '<leader>bh', ':BufferLineCloseLeft<CR>', opts)
-vim.keymap.set('n', '<leader>bc', ':BufferLinePickClose<CR>', opts)
-
 -- Telescope 快捷键
 vim.keymap.set('n', '<C-p>', ':Telescope find_files<CR>', opts) -- 查找文件
 vim.keymap.set('n', '<C-f>', ':Telescope live_grep<CR>', opts)  -- 全局搜索
@@ -79,6 +69,10 @@ vim.keymap.set('n', '<C-f>', ':Telescope live_grep<CR>', opts)  -- 全局搜索
 -- kubectl
 vim.keymap.set("n", "<leader>k", '<cmd>lua require("kubectl").toggle()<cr>', { noremap = true, silent = true })
 vim.keymap.set('n', ';', ':', { noremap = true, silent = false })
+
+-- Jump list navigation (e.g. after `gd`)
+vim.keymap.set("n", "gb", "<C-o>", opts) -- back
+vim.keymap.set("n", "gB", "<C-i>", opts) -- forward
 -----------------
 -- 插入模式 --
 -----------------
@@ -118,12 +112,6 @@ vim.keymap.set('n', '<leader>x', '<C-w>c', opts)             -- 普通模式关�
 vim.keymap.set('t', '<leader>x', [[<C-\><C-n><C-w>c]], opts) -- 终端模式直接关闭
 
 -- 调整窗口大小
-vim.keymap.set('n', '<C-Up>', ':resize -2<CR>', opts)
-vim.keymap.set('n', '<C-Down>', ':resize +2<CR>', opts)
-vim.keymap.set('n', '<C-Left>', ':vertical resize -2<CR>', opts)
-vim.keymap.set('n', '<C-Right>', ':vertical resize +2<CR>', opts)
-
-
 -- 绑定快捷键 leader + i 执行 GoImplOpen
 vim.api.nvim_set_keymap(
     "n",                              -- 普通模式
@@ -132,4 +120,3 @@ vim.api.nvim_set_keymap(
     { noremap = true, silent = true } -- 选项
 )
 -- 绑定 Option + Enter 为补全触发快捷键
-
