@@ -1,95 +1,87 @@
 # mac-config
 
-> mac-config 是一个用于管理 macOS 系统开发环境的配置项目，包含常见的配置文件、环境变量、以及工具的初始化设置。
+> macOS 开发环境配置仓库，包含 shell、tmux、编辑器和常用工具配置。
 
 ## 目录结构
 
-```
+```text
 mac-config/
-├── nvim/               # Neovim 配置文件夹
-├── .gitconfig          # Git 配置文件
-├── .ideavimrc         # IntelliJ IDEA 的 Vim 模式配置文件
-├── .npmrc             # npm 配置文件，存储 npm 注册表和认证信息
-├── .vimrc             # Vim 编辑器的配置文件
-├── .zprofile          # Zsh 登录 Shell 的配置文件
-├── .zshrc             # Zsh 交互式 Shell 的配置文件
-├── docker.json        # Docker 配置文件
-├── go.env             # Go 语言环境变量配置文件
-└── README.md          # 项目说明文件
+├── nvim/                 # Neovim 配置
+├── .gitconfig            # Git 配置
+├── .ideavimrc            # IdeaVim 配置
+├── .npmrc                # npm registry 配置
+├── .p10k.zsh             # Powerlevel10k 主题
+├── .tmux.conf            # tmux 配置
+├── .vimrc                # Vim 配置
+├── .zprofile             # Zsh login shell 配置
+├── .zshrc                # Zsh interactive 配置
+├── .zshrc.local.example  # 本地私有变量模板
+├── docker.json           # Docker 配置
+├── go.env                # Go 环境变量
+└── README.md             # 项目说明
 ```
 
-## 文件说明
+## 说明
 
-### 1. nvim/
-Neovim 文件夹包含 Neovim 的配置文件和插件管理设置，用于自定义和优化 Neovim 编辑器。
+- `.zshrc` 是公开版，不包含 token、API key、私有服务地址。
+- 私有变量统一放到 `~/.zshrc.local`，示例见 `.zshrc.local.example`。
+- `.p10k.zsh` 是当前使用的 Powerlevel10k 主题配置。
+- `.tmux.conf` 包含当前使用的 tmux 键位、路径继承和状态栏配置。
 
-### 2. .gitconfig
-Git 全局配置文件，用于设置 Git 用户名、邮箱、别名等。
+## 安装
 
-### 3. .ideavimrc
-IntelliJ IDEA 的 Vim 模式配置文件，用于配置快捷键和常用命令。
+1. 克隆仓库
 
-### 4. .npmrc
-npm 的配置文件，可用来设置：
-- 私有 npm 注册表
-- 缓存目录
-- npm Token
-
-### 5. .vimrc
-Vim 的配置文件，包含快捷键、主题和常用设置。
-
-### 6. .zprofile
-Zsh 登录 Shell 的配置文件，在启动登录 Shell 时执行，常用于设置环境变量。
-
-### 7. .zshrc
-Zsh 的交互式配置文件，包含别名、路径、插件和主题配置。
-
-### 8. docker.json
-Docker 的配置文件，用于配置 Docker 守护进程的选项，例如镜像加速器。
-
-### 9. go.env
-Go 语言相关的环境变量文件，可用来设置 Go 的工作区路径和代理。
-
-## 使用方法
-
-### 1. 克隆项目
 ```bash
 git clone https://github.com/hsn0918/mac-config.git
 cd mac-config
 ```
 
-### 2. 复制配置文件
+2. 复制常用配置
+
 ```bash
 cp .gitconfig ~/.gitconfig
 cp .zshrc ~/.zshrc
+cp .p10k.zsh ~/.p10k.zsh
+cp .tmux.conf ~/.tmux.conf
 cp .vimrc ~/.vimrc
 ```
 
-### 3. 自定义配置
+3. 创建本地私有配置
+
 ```bash
-vim .zshrc  # 根据需要编辑对应文件
+cp .zshrc.local.example ~/.zshrc.local
 ```
 
-### 4. 重新加载配置
+4. 按需填写 `~/.zshrc.local`
+
+- Token
+- API key
+- 私有服务地址
+- 代理
+- 机器专属路径
+
+5. 重新加载配置
+
 ```bash
-source ~/.zshrc
+exec zsh
+tmux source-file ~/.tmux.conf
 ```
+
+## 安全约定
+
+- 不要把 token、API key、密码、私有 endpoint 提交到仓库。
+- 所有敏感变量都只放在 `~/.zshrc.local`。
+- 仓库中的 `.zshrc` 只保留可公开分享的默认配置。
 
 ## 环境要求
 
-- **操作系统**
-  - macOS
-
-- **必需工具**
-  - Neovim 或 Vim
-  - Git
-  - Zsh
-  - Docker
-  - Go
-
-## 贡献
-
-欢迎提交 issue 和 PR，以改进项目的功能或文档。
+- macOS
+- Zsh
+- Oh My Zsh
+- Powerlevel10k
+- tmux
+- Neovim 或 Vim
 
 ## 许可证
 

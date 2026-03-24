@@ -1,54 +1,73 @@
-# User
-DEFAULT_USER="HSn"
+DEFAULT_USER="HSn"  # Default prompt user
 
-# Paths and environment
+# Enable Powerlevel10k instant prompt. Keep this close to the top of ~/.zshrc.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# Zsh and environment
 export ZSH="$HOME/.oh-my-zsh"
 export GOPATH="$HOME/go"
-export JAVA_HOME="/opt/homebrew/opt/openjdk@11"
 export NVM_DIR="$HOME/.nvm"
+export BUN_INSTALL="$HOME/.bun"
+export PATH="/opt/homebrew/bin:$PATH:/opt/homebrew/bin/npx"
+export PATH="$HOME/.local/bin:$PATH"
+
+# Load private tokens and machine-local overrides from ~/.zshrc.local.
+# Keep secrets, proxies and private endpoints out of this repo.
+[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
+
+export PATH=$PATH:$GOPATH/bin:/usr/local/mysql/bin
+[[ -n "$JAVA_HOME" ]] && export PATH=$PATH:$JAVA_HOME/bin
+export PATH=$PATH:/opt/homebrew/opt/icu4c/bin:/opt/homebrew/opt/icu4c/sbin
+export PATH=$PATH:"${KREW_ROOT:-$HOME/.krew}/bin"
+[[ -n "$BUN_INSTALL" ]] && export PATH="$BUN_INSTALL/bin:$PATH"
+
 export BUILDKIT_NO_CLIENT_TOKEN=true
 export EDITOR="nvim"
 export CLICOLOR=1
 
-if command -v zsh >/dev/null; then
-  export SHELL="$(command -v zsh)"
-fi
+[[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
 
-# PATH management
 typeset -U path PATH
-path_append() {
-  [[ -d "$1" ]] && path+=("$1")
+
+ZSH_COMPLETION_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/completions"
+[[ -d "$ZSH_COMPLETION_CACHE_DIR" ]] || command mkdir -p "$ZSH_COMPLETION_CACHE_DIR"
+fpath=("$ZSH_COMPLETION_CACHE_DIR" $fpath)
+
+cache_completion() {
+  local cmd="$1"
+  shift
+  local cache_file="$ZSH_COMPLETION_CACHE_DIR/_${cmd}"
+
+  (( $+commands[$cmd] )) || return 0
+
+  if [[ ! -s "$cache_file" || ${commands[$cmd]} -nt "$cache_file" ]]; then
+    "$cmd" "$@" >| "$cache_file" 2>/dev/null || {
+      command rm -f "$cache_file"
+      return 0
+    }
+  fi
 }
 
-path_append "$GOPATH/bin"
-path_append "/usr/local/mysql/bin"
-path_append "$JAVA_HOME/bin"
-path_append "/opt/homebrew/opt/icu4c/bin"
-path_append "/opt/homebrew/opt/icu4c/sbin"
-path_append "${KREW_ROOT:-$HOME/.krew}/bin"
-
-if command -v npm >/dev/null; then
-  npm_global_bin="$(npm bin -g 2>/dev/null)"
-  if [[ -n "$npm_global_bin" ]]; then
-    path_append "$npm_global_bin"
-  fi
-fi
-unset npm_global_bin
-
-# Enable NVM
-if [[ -s "/opt/homebrew/opt/nvm/nvm.sh" ]]; then
-  . "/opt/homebrew/opt/nvm/nvm.sh"
-fi
-if [[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ]]; then
-  . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
-fi
+cache_completion kubectl completion zsh
+cache_completion kubecm completion zsh
+cache_completion helm completion zsh
+cache_completion buf completion zsh
+cache_completion dagger completion zsh
+cache_completion sqlc completion zsh
+cache_completion kwok completion zsh
+cache_completion kwokctl completion zsh
+cache_completion talosctl completion zsh
+cache_completion kubebuilder completion zsh
+cache_completion jj util completion zsh
+cache_completion railway completion zsh
 
 # Zsh settings
-ZSH_THEME="robbyrussell"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 plugins=(
   git
   jsontools
-  zsh-autosuggestions
   vscode
   emoji-clock
   aliases
@@ -58,46 +77,54 @@ plugins=(
   tmux
   fzf
   macos
-  zsh-syntax-highlighting
+  autojump
 )
 
 source "$ZSH/oh-my-zsh.sh"
+[[ -f "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
 
-# Disable command auto-correct
+# Shell behavior
 unsetopt correct correct_all
+bindkey -v
+KEYTIMEOUT=10
+
+# Keep common Ctrl shortcuts available in insert mode so mistyped keys
+# don't get inserted as literal control characters such as ^A.
+bindkey -M viins '^A' beginning-of-line
+bindkey -M viins '^E' end-of-line
+bindkey -M viins '^W' backward-kill-word
+bindkey -M viins '^U' backward-kill-line
+bindkey -M viins '^K' kill-line
+bindkey -M viins '^R' history-incremental-search-backward
+bindkey -M viins '^P' up-line-or-history
+bindkey -M viins '^N' down-line-or-history
+bindkey -M viins '^B' backward-char
+bindkey -M viins '^F' forward-char
+bindkey -M viins '^L' clear-screen
 
 # Config shortcuts
 alias bashconfig="vim ~/.bashfile"
 alias zshconfig="vim ~/.zshrc"
 alias vimconfig="vim ~/.vimrc"
+
+# Apps
+alias zed='open -a Zed'
+
 # File and directory
-if command -v eza >/dev/null; then
-  alias ls='eza --color=auto'
-  alias ll='eza -lh --color=auto'
-  alias la='eza -a --color=auto'
-  alias lsa='eza -la --color=auto'
-  alias l.='eza -d .* --color=auto'
-  alias lh='eza -alths --color=auto'
-elif command -v gls >/dev/null; then
-  alias ls='gls --color=auto'
-  alias ll='gls -lh --color=auto'
-  alias la='gls -a --color=auto'
-  alias lsa='gls -la --color=auto'
-  alias l.='gls -d .* --color=auto'
-  alias lh='gls -alths --color=auto'
-else
-  alias ls='ls -G'
-  alias ll='ls -lh -G'
-  alias la='ls -a -G'
-  alias lsa='ls -la -G'
-  alias l.='ls -d .* -G'
-  alias lh='ls -alths -G'
-fi
+alias ls='eza --icons'
+alias ll='eza -lh --icons'
+alias la='eza -a --icons'
+alias l.='eza -d .* --icons'
+alias lh='eza -l --sort=modified -h --icons'
+alias lt='eza -T --level=2 --icons'
+alias lt3='eza -T --level=3 --icons'
+alias tree='eza -T --icons'
 alias ..='cd ..'
 alias ...='cd ../../..'
 alias mkdir='mkdir -pv'
 alias rd='rm -rf'
-alias tree='tree --charset ASCII'
+alias lds='du -sh * | sort -h'
+alias lg='eza -la --git --icons'
 
 # Search
 alias grep='grep --color=auto'
@@ -174,45 +201,34 @@ alias kr="kubectl rollout restart"
 alias krd="kubectl rollout status deployment"
 
 alias kns="kubectl config set-context --current --namespace"
-
 alias kge="kubectl get events --sort-by='.lastTimestamp'"
-
 alias kw="kubectl get --watch"
 alias kgwl="kubectl get pods -o wide --watch"
-
 alias kgcrd="kubectl get crd"
-
 alias kgjp="kubectl get pods -o json | jq"
 alias kgjd="kubectl get deployment -o json | jq"
-
 alias kdfp="kubectl delete pod --field-selector=status.phase=Failed"
-
 alias kres="kubectl rollout restart deployment"
 
-if command -v kubecolor >/dev/null; then
+if (( $+commands[kubecolor] )); then
   alias kubectl="kubecolor"
 fi
 
-if command -v kubecm >/dev/null; then
+if (( $+commands[kubecm] )); then
   alias kc='kubecm'
   alias kcs='kubecm switch'
 fi
 
-if command -v kubefwd >/dev/null; then
+if (( $+commands[kubefwd] )); then
   alias kf='kubefwd'
 fi
 
 alias kctx="kubectl config get-contexts"
 alias kcx="kubectl config use-context"
-
 alias kgns="kubectl get namespaces"
-
 alias kcfg="kubectl config view --minify"
-
 alias ktn="kubectl top nodes"
-
 alias badnode='kubectl get nodes -o jsonpath='\''{range .items[*]}{.metadata.name}{"\t"}{.status.conditions[?(@.type=="Ready")].status}{"\t"}{.status.addresses[?(@.type=="InternalIP")].address}{"\n"}{end}'\'' | awk -F'\''\t'\'' '\''$2 != "True" {print $3}'\'''
-
 alias kv="kubevpn"
 
 # Docker
@@ -226,11 +242,11 @@ alias dlog='docker logs -f'
 alias dvol='docker volume ls'
 
 # Git stats
-alias daygit='git log --author="hsn" --since="1 day ago" --pretty=tformat: --numstat -- . ":(exclude)vendor" ":(exclude)static/bower_components" | awk '\''{ add += $1; subs += $2; loc += $1 - $2 } END { printf "today git added %s lines, deleted %s lines, total %s lines\n", add, subs, loc }'\'''
-alias weekgit='git log --author="hsn" --since="1 week ago" --pretty=tformat: --numstat -- . ":(exclude)vendor" ":(exclude)static/bower_components" | awk '\''{ add += $1; subs += $2; loc += $1 - $2 } END { printf "this week git added %s lines, deleted %s lines, total %s lines\n", add, subs, loc }'\'''
-alias monthgit='git log --author="hsn" --since="1 month ago" --pretty=tformat: --numstat -- . ":(exclude)vendor" ":(exclude)static/bower_components" | awk '\''{ add += $1; subs += $2; loc += $1 - $2 } END { printf "this month git added %s lines, deleted %s lines, total %s lines\n", add, subs, loc }'\'''
-alias yeargit='git log --author="hsn" --since="1 year ago" --pretty=tformat: --numstat -- . ":(exclude)vendor" ":(exclude)static/bower_components" | awk '\''{ add += $1; subs += $2; loc += $1 - $2 } END { printf "this year git added %s lines, deleted %s lines, total %s lines\n", add, subs, loc }'\'''
-alias allgit='git log --author="hsn" --pretty=tformat: --numstat -- . ":(exclude)vendor" ":(exclude)static/bower_components" | awk '\''{ add += $1; subs += $2; loc += $1 - $2 } END { printf "git total added %s lines, deleted %s lines, total %s lines\n", add, subs, loc }'\'''
+alias daygit='git log --author="hsn" --since="1 day ago" --pretty=tformat: --numstat -- . ":(exclude)vendor" ":(exclude)static/bower_components" | awk '\''{ add += $1; subs += $2; loc += $1 - $2 } END { printf "今天git增加了 %s 行, 删除了 %s 行, 总共修改了 %s 行\n", add, subs, loc }'\'''
+alias weekgit='git log --author="hsn" --since="1 week ago" --pretty=tformat: --numstat -- . ":(exclude)vendor" ":(exclude)static/bower_components" | awk '\''{ add += $1; subs += $2; loc += $1 - $2 } END { printf "本周git增加了 %s 行, 删除了 %s 行, 总共修改了 %s 行\n", add, subs, loc }'\'''
+alias monthgit='git log --author="hsn" --since="1 month ago" --pretty=tformat: --numstat -- . ":(exclude)vendor" ":(exclude)static/bower_components" | awk '\''{ add += $1; subs += $2; loc += $1 - $2 } END { printf "本月git增加了 %s 行, 删除了 %s 行, 总共修改了 %s 行\n", add, subs, loc }'\'''
+alias yeargit='git log --author="hsn" --since="1 year ago" --pretty=tformat: --numstat -- . ":(exclude)vendor" ":(exclude)static/bower_components" | awk '\''{ add += $1; subs += $2; loc += $1 - $2 } END { printf "今年git增加了 %s 行, 删除了 %s 行, 总共修改了 %s 行\n", add, subs, loc }'\'''
+alias allgit='git log --author="hsn" --pretty=tformat: --numstat -- . ":(exclude)vendor" ":(exclude)static/bower_components" | awk '\''{ add += $1; subs += $2; loc += $1 - $2 } END { printf "git总共增加了 %s 行, 删除了 %s 行, 总共修改了 %s 行\n", add, subs, loc }'\'''
 
 # Dev tools
 alias cl='clear'
@@ -239,9 +255,8 @@ alias py='python3'
 alias code='code .'
 alias vimdiff='vim -d'
 alias vim='nvim'
-alias clear='clear && clear'
 
-# File suffix shortcuts
+# Suffix aliases
 alias -s php='vim'
 alias -s css='vim'
 alias -s scss='vim'
@@ -251,7 +266,6 @@ alias -s yaml='vim'
 alias -s yml='vim'
 alias -s toml='vim'
 alias -s md='vim'
-
 alias -s js='vim'
 alias -s ts='vim'
 alias -s py='vim'
@@ -282,23 +296,21 @@ alias -s cfg='vim'
 alias -s conf='vim'
 alias -s log='vim'
 
-# Completion
-if command -v kubectl >/dev/null; then
-  source <(kubectl completion zsh)
-fi
-if command -v minikube >/dev/null; then
-  source <(minikube completion zsh)
-fi
-if command -v kubecm >/dev/null; then
-  source <(kubecm completion zsh)
-fi
-if command -v helm >/dev/null; then
-  source <(helm completion zsh)
-fi
-if command -v kubecolor >/dev/null && (( $+functions[compdef] )); then
-  compdef kubecolor=kubectl
-fi
+(( $+commands[kubecolor] )) && compdef kubecolor=kubectl
 
 function command_not_found_handle {
-  echo "Command not found. Skipping..." > /dev/null
+  return 127
 }
+
+# Load interactive zsh widgets last so they can wrap self-insert/accept-line correctly.
+if [[ -f "$ZSH_CUSTOM/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
+  source "$ZSH_CUSTOM/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
+elif [[ -f "$ZSH/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
+  source "$ZSH/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
+fi
+
+if [[ -f "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
+  source "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+elif [[ -f "$ZSH/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
+  source "$ZSH/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+fi

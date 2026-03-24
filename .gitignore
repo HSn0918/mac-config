@@ -1,4 +1,4 @@
 ./nvim/.idea
 .idea
-
-
+.zshrc.local
+.tmux/plugins/

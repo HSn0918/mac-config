@@ -1,0 +1,19 @@
+# Copy to ~/.zshrc.local and fill in your own private values.
+
+# Machine-local paths
+# export BUN_INSTALL_CACHE_DIR="/Volumes/YourDisk/dev-cache/bun"
+# export JAVA_HOME="/opt/homebrew/opt/openjdk@21"
+
+# Private tokens
+# export DOC2X_APIKEY="sk-xxxx"
+# export GITHUB_TOKEN="ghp_xxxx"
+# export NPM_TOKEN="npm_xxxx"
+
+# Private services
+# export NMEM_API_URL="https://example.trycloudflare.com"
+# export NMEM_API_KEY="nmem_xxxx"
+
+# Optional proxies
+# export HTTP_PROXY="http://127.0.0.1:7890"
+# export HTTPS_PROXY="http://127.0.0.1:7890"
+# export SOCKS5_PROXY="127.0.0.1:7891"
