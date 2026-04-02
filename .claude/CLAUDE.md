@@ -1,149 +1,43 @@
-<intelligentSystem lang="zh-CN">
-    <corePrinciples>
-        <principle>中文回答</principle>
-        <principle>原生并行</principle>
-        <principle>动态生成</principle>
-        <principle>MCP工具优先</principle>
-    </corePrinciples>
+# Global Claude Code Instructions
 
-    <tooling>
-        <title>核心工具链 (现代优化版)</title>
-        <tool name="fd" replaces="find" description="文件和目录快速查找"/>
-        <tool name="rg" replaces="grep" description="高性能文本内容搜索"/>
-        <tool name="ast-grep" description="代码结构化搜索与分析"/>
-        <tool name="jq" description="JSON 数据处理"/>
-        <tool name="yq" description="YAML 数据处理"/>
-        <tool name="fzf" description="交互式模糊查找"/>
-    </tooling>
+## General Principles
 
-    <executionFlow>
-        <title>执行流程</title>
-        <phase name="1. 并行项目感知 (5秒内)">
-            <description>通过一次并行调用，全面分析项目技术栈、结构和依赖。</description>
-            <parallelCommands>
-                <codeBlock language="bash"><![CDATA[
-# 同时进行文件发现、配置读取和代码结构分析
-fd -e json -e yml -e md -e mod & \
-yq '.services.*.image' docker-compose.yml & \
-jq '.dependencies' package.json & \
-ast-grep --lang go -p 'func main() { $$$ }' & \
-ast-grep --lang tsx -p 'import React from "react"' & \
-rg -t py "class|def" & \
-fd --extension go --extension ts --extension py | fzf -m --preview 'cat {}'
-                ]]></codeBlock>
-            </parallelCommands>
-        </phase>
-        <phase name="2. 智能分流决策">
-            <description>根据项目复杂性，自动选择最高效的处理模式。</description>
-            <logic>
-                <condition description="简单任务 (文件 &lt; 3, 单一技术栈)">
-                    <action>触发 [快速模式]</action>
-                </condition>
-                <condition description="中等及复杂任务 (多文件, 跨领域)">
-                    <action>触发 [标准模式]，动态生成Subagents</action>
-                </condition>
-            </logic>
-        </phase>
-        <phase name="3. 动态执行">
-            <mode name="快速模式">
-                <summary>主Assistant直接使用并行工具完成任务，无Subagent开销。</summary>
-                <outputFormat>✅ [操作] 完成</outputFormat>
-            </mode>
-            <mode name="标准模式">
-                <summary>主Assistant生成领域专家Subagents，并按顺序委派任务。每个Subagent内部再次利用并行工具链。</summary>
-                <outputFormat>✅ [阶段] 完成 | 协作: [专家列表]</outputFormat>
-            </mode>
-        </phase>
-    </executionFlow>
+- When the user reports a bug or asks to fix something, focus on the specific scope they mentioned. Don't remove or modify unrelated code unless explicitly asked.
+- Don't add features, refactor code, or make "improvements" beyond what was asked. Keep solutions simple and focused.
+- Don't add docstrings, comments, or type annotations to code you didn't change.
+- Don't add error handling, fallbacks, or validation for scenarios beyond the current task.
+- When in doubt about scope, do less and ask rather than doing more.
 
-    <dynamicAgents>
-        <title>动态Subagent生成</title>
-        <generationTriggers>
-            <trigger detect="React/Vue" generate="frontend-expert.md"/>
-            <trigger detect="Express/FastAPI" generate="backend-expert.md"/>
-            <trigger detect="Go (go.mod)" generate="go-backend-expert.md"/>
-            <trigger detect="Docker/Kubernetes" generate="devops-expert.md"/>
-            <trigger detect="MongoDB/Postgres" generate="data-expert.md"/>
-        </generationTriggers>
-        <template format=".claude/agents/agent-name.md">
-            <structure>
-                <field type="YAML Frontmatter">name, description, tools</field>
-                <field type="Markdown Body">系统提示, 职责范围, 并行策略</field>
-            </structure>
-        </template>
-        <exampleAgent file="react-frontend-expert.md">
-            <promptContent>
-                <frontmatter>
-                    <field name="name">react-frontend-expert</field>
-                    <field name="description">React前端专家，使用ast-grep分析组件结构，处理UI和状态管理。</field>
-                    <field name="tools">Read, Write, Edit, rg, fd, ast-grep, Bash, mcp__Context7</field>
-                </frontmatter>
-                <body>
-                    <p>你是React专家。</p>
-                    <section title="🚀 并行执行优化">
-                        <p><strong>核心</strong>: For maximum efficiency, invoke all relevant tools simultaneously rather than sequentially.</p>
-                    </section>
-                    <section title="职责">
-                        <list type="unordered">
-                            <item>使用 <inlineCode>ast-grep</inlineCode> 分析组件 (<inlineCode>ast-grep -p 'const $_ = () => {}'</inlineCode>)</item>
-                            <item>使用 <inlineCode>rg</inlineCode> 搜索props和state</item>
-                            <item>使用 <inlineCode>fd</inlineCode> 定位组件文件</item>
-                        </list>
-                    </section>
-                    <section title="并行策略">
-                        <list type="unordered">
-                            <item><strong>分析</strong>: <inlineCode>fd '\.tsx$' src/ &amp; rg "useState|useEffect" &amp; ast-grep -p '&lt;MyComponent /&gt;'</inlineCode></item>
-                            <item><strong>实施</strong>: <p>同时修改多个组件文件，并用 <inlineCode>mcp__chrome-mcp-stdio</inlineCode> 预览。</p></item>
-                        </list>
-                    </section>
-                </body>
-            </promptContent>
-        </exampleAgent>
-        <exampleAgent file="go-backend-expert.md">
-            <promptContent>
-                <frontmatter>
-                    <field name="name">go-backend-expert</field>
-                    <field name="description">Go后端专家，使用ast-grep分析Go代码结构，处理API、并发和模块依赖。</field>
-                    <field name="tools">Read, Write, Edit, rg, fd, ast-grep, Bash, mcp__Context7</field>
-                </frontmatter>
-                <body>
-                    <p>你是Go语言专家 (Golang expert)。</p>
-                    <section title="🚀 并行执行优化">
-                        <p><strong>核心</strong>: For maximum efficiency, invoke all relevant tools simultaneously rather than sequentially.</p>
-                    </section>
-                    <section title="职责">
-                        <list type="unordered">
-                            <item>使用 <inlineCode>ast-grep --lang go -p 'func $_(...)'</inlineCode> 分析函数和方法。</item>
-                            <item>使用 <inlineCode>ast-grep --lang go -p 'type $_ struct { $$$ }'</inlineCode> 分析结构体。</item>
-                            <item>使用 <inlineCode>Bash</inlineCode> 工具执行 <inlineCode>go mod tidy</inlineCode> 和 <inlineCode>go test ./...</inlineCode>。</item>
-                            <item>使用 <inlineCode>rg "go func|make\(chan"</inlineCode> 查找并发代码。</item>
-                        </list>
-                    </section>
-                    <section title="并行策略">
-                        <list type="unordered">
-                            <item><strong>分析</strong>: <inlineCode>go mod edit -json | jq '.Require[].Path' &amp; ast-grep --lang go -p 'func $_(...)' &amp; rg "package main"</inlineCode></item>
-                            <item><strong>测试</strong>: <inlineCode>go test ./... &amp; go vet ./... &amp; rg "TODO|FIXME"</inlineCode></item>
-                            <item><strong>构建</strong>: <inlineCode>go build -o myapp &amp; fd -e go -x gofmt -w</inlineCode></item>
-                        </list>
-                    </section>
-                </body>
-            </promptContent>
-        </exampleAgent>
-    </dynamicAgents>
+## Git
 
-    <coreRules>
-        <title>核心规则</title>
-        <do>
-            <rule>并行优先：无依赖的操作必须并行执行。</rule>
-            <rule>工具优先：优先使用 `fd`, `rg`, `ast-grep`, `jq`, `yq`。</rule>
-            <rule>动态生成：复杂任务需自动生成并委派给Subagents。</rule>
-            <rule>MCP优先：优先使用 `mcp__*` 系列工具以获得更强能力。</rule>
-        </do>
-        <dont>
-            <rule>禁止串行：避免执行有依赖关系的操作。</rule>
-            <rule>禁止冲突：避免并行写入同一文件。</rule>
-            <rule>避免手动：技术栈识别和专家选择必须自动化。</rule>
-        </dont>
-    </coreRules>
+- Never include Co-Authored-By or AI attribution lines in git commits unless explicitly asked.
+- When asked to commit, just do it. Don't hesitate, ask for confirmation, or question whether to commit.
+- Follow the user's commit message style. Don't add extra files (like uv.lock) not related to the task.
+- Stage only the files relevant to the current task.
 
-</intelligentSystem>
+## Code Changes
+
+- When renaming or replacing a term across the codebase, do a final grep/search for ALL remaining references (including comments, strings, struct fields, JSON tags) before reporting completion.
+- After making any change, verify: grep for old references, run the build/typecheck, list all files changed. Don't report done until verified.
+- When asked to change something in multiple places, always search exhaustively — don't assume you found all occurrences.
+- Use `fd` instead of `find` for file searching (e.g., `fd '\.go$'`, `fd -e ts`).
+- Use `ast-grep` (or `sg`) for structural code search and refactoring — prefer it over regex grep when searching for functions, types, or code patterns (e.g., `sg -p 'func $NAME($$$)' -l go`, `sg -p 'import { $$$ } from "$MOD"' -l ts`).
+
+## Go Conventions
+
+- Use context.Context pattern for goroutine lifecycle management (not stopCh).
+- Put request/response models in the model package, not inline with handlers.
+- Use pure echo handler style — do not use connecthttp style.
+- Never use panic for error fallbacks.
+- Do not add unnecessary abstractions or helpers for one-time operations.
+
+## Documentation
+
+- When making changes to README or documentation, always check for and update ALL language versions (e.g., both Chinese and English READMEs).
+- Don't create documentation files unless explicitly requested.
+
+## Session Approach
+
+- Prefer focused, single-goal sessions. If a task seems to bundle multiple goals, handle one at a time unless told otherwise.
+- When starting a multi-file refactor, read existing patterns first and match them exactly before writing any new code.
+- Before declaring a task complete, self-verify: search for remaining old references, confirm the build passes, list all changed files.
