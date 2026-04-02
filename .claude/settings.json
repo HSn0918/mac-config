@@ -22,6 +22,28 @@
             "timeout": 5
           }
         ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'FILE=\"$CLAUDE_FILE_PATH\"; case \"$FILE\" in *.env|*.env.*) echo \"禁止修改 .env 文件\" >&2; exit 2 ;; */go.sum) echo \"禁止直接修改 go.sum\" >&2; exit 2 ;; */package-lock.json|*/pnpm-lock.yaml|*/yarn.lock|*/uv.lock) echo \"禁止直接修改 lock 文件\" >&2; exit 2 ;; esac; exit 0'",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'MSG=$(echo \"$CLAUDE_NOTIFICATION\" | head -c 200); osascript -e \"display notification \\\"$MSG\\\" with title \\\"Claude Code\\\"\" 2>/dev/null; exit 0'",
+            "timeout": 5
+          }
+        ]
       }
     ]
   },
