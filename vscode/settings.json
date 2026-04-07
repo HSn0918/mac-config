@@ -1,0 +1,150 @@
+{
+    // 编辑器基础设置
+    "editor.suggestSelection": "first",
+    "editor.formatOnPaste": true,
+    "editor.detectIndentation": false,
+    "editor.renderWhitespace": "all",
+    "editor.selectionHighlight": false,
+    "editor.unicodeHighlight.nonBasicASCII": false,
+    "editor.fontLigatures": true,
+    "editor.fontSize": 18,
+    "editor.mouseWheelZoom": true,
+    "editor.guides.bracketPairs": true,
+    "editor.inlineSuggest.enabled": true,
+    "editor.linkedEditing": true,
+
+    // 文件设置
+    "files.exclude": {
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true
+    },
+    "files.autoSave": "afterDelay",
+    "files.trimTrailingWhitespace": true,
+    "files.defaultLanguage": "html",
+    "files.autoGuessEncoding": true,
+
+    // 工作区设置
+    "workbench.colorTheme": "Tokyo Night",
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.editor.enablePreview": false,
+    "workbench.editor.empty.hint": "hidden",
+    "window.openFoldersInNewWindow": "on",
+    "window.openFilesInNewWindow": "on",
+    "window.systemColorTheme": "dark",
+
+    // Go 语言设置
+    "go.useLanguageServer": true,
+    "go.lintTool": "golangci-lint",
+    "go.toolsManagement.autoUpdate": true,
+    "go.testOnSave": false,
+    "go.coverOnSave": false,
+    "go.lintOnSave": "workspace",
+    "go.vetOnSave": "workspace",
+    "go.inferGopath": true,
+    "go.inlayHints.assignVariableTypes": true,
+    "go.inlayHints.compositeLiteralFields": true,
+    "go.alternateTools": {
+        "go-to-def": "gopls"
+    },
+    "gopls": {
+        "ui.diagnostic.analyses": {
+            "unusedparams": true
+        }
+    },
+    "go.delveConfig": {
+        "dlvLoadConfig": {
+            "followPointers": true,
+            "maxVariableRecurse": 1,
+            "maxStringLen": 2048,
+            "maxArrayValues": 64,
+            "maxStructFields": -1
+        }
+    },
+    "[go]": {
+        "editor.insertSpaces": false,
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+        }
+    },
+
+    // Neovim 设置
+    "vscode-neovim.logOutputToConsole": true,
+    "vscode-neovim.neovimExecutablePaths.darwin": "/opt/homebrew/bin/nvim",
+    "vscode-neovim.neovimInitVimPaths.darwin": "/Users/mac/.config/nvim/init.lua",
+    "vscode-neovim.highlightGroups.highlights": {
+        "IncSearch": {
+            "backgroundColor": "theme.editor.findMatchBackground"
+        },
+        "CurSearch": {
+            "backgroundColor": "theme.editor.findMatchBackground"
+        },
+        "Search": {
+            "backgroundColor": "theme.editor.findMatchHighlightBackground"
+        },
+        "Substitute": {
+            "backgroundColor": "theme.editor.foreground",
+            "color": "theme.editor.background"
+        }
+    },
+
+    // 其他语言和工具设置
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "[vue]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "rust-analyzer.testExplorer": true,
+    "vs-kubernetes": {
+        "vscode-kubernetes.minikube-path-mac": "/Users/mac/.vs-kubernetes/tools/minikube/darwin-arm64/minikube",
+        "vs-kubernetes.knownKubeconfigs": [
+            "/home/hsn/.kube/aws-cloud",
+            "/home/hsn/.kube/config"
+        ],
+        "vs-kubernetes.kubeconfig": "/home/hsn/.kube/config"
+    },
+
+    // 其他设置
+    "code-runner.runInTerminal": true,
+    "security.workspace.trust.untrustedFiles": "open",
+    "diffEditor.ignoreTrimWhitespace": false,
+    "debug.onTaskErrors": "debugAnyway",
+    "markdown.preview.breaks": true,
+    "terminal.integrated.defaultProfile.osx": "fish",
+    "terminal.integrated.profiles.osx": {
+        "fish": {
+            "path": "/opt/homebrew/bin/fish",
+            "icon": "terminal"
+        }
+    },
+    "terminal.integrated.fontFamily": "Hack Nerd Font Propo",
+    "terminal.integrated.fontSize": 15,
+    "terminal.integrated.detectLocale": "on",
+    "errorLens.excludeBySource": ["ts(1005)"],
+    "extensions.experimental.affinity": {
+        "asvetliakov.vscode-neovim": 1
+    },
+    "inline-parameters.python.ignoreFunctions": [],
+    "leetcode-problem-rating.workspaceFolder": "e:\\leetcodecpp",
+    "github.copilot.enable": {
+        "*": false
+    },
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "geminicodeassist.project": "curious-constant-t757n",
+    "cometixTab.clientKey": "3bcb934918bf10b2565179c9e05dad5a",
+    "cometixTab.authToken": "11111",
+    "gitlens.ai.model": "vscode",
+    "gitlens.ai.vscode.model": "copilot:gpt-4.1",
+    "workbench.startupEditor": "none",
+    "gitlens.advanced.messages": {
+        "suppressIntegrationDisconnectedTooManyFailedRequestsWarning": true
+    },
+    "protobuf.buf.path": "/home/linuxbrew/.linuxbrew/bin/buf",
+    "protobuf.externalLinter.bufPath": "/home/linuxbrew/.linuxbrew/bin/buf",
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "editor.accessibilitySupport": "on"
+}
