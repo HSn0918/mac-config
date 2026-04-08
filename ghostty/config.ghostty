@@ -9,7 +9,13 @@ font-size = 18
 # ── Colors (Catppuccin Mocha — dark + warm khaki tones) ──────────────────────
 theme = Catppuccin Mocha
 
-# ── Window ───────────────────────────────────────────────────────────────────
+# ── macOS Icon ───────────────────────────────────────────────────────────────
+macos-icon = custom-style
+macos-icon-frame = chrome
+macos-icon-ghost-color = f2cdcd
+macos-icon-screen-color = 1e1e2e
+
+
 window-padding-x = 8
 window-padding-y = 8
 window-decoration = true
