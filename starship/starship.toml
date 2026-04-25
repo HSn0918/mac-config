@@ -1,91 +1,111 @@
-"$schema" = 'https://starship.rs/config-schema.json'
+"$schema" = "https://starship.rs/config-schema.json"
 
-# Catppuccin Mocha palette:
-# Flamingo #F2CDCD  Mauve #CBA6F7  Pink #F38BA8
-# Blue #89B4FA  Green #A6E3A1  Yellow #F9E2AF
-# Cyan #89DCEB  Red #F38BA8  Peach #FAB387
+add_newline = true
+command_timeout = 800
+scan_timeout = 30
+palette = "macconfig"
 
 format = """
-$username$hostname$directory$git_branch$git_status$golang$nodejs$rust$python$docker_context$cmd_duration
-$character"""
+$username$hostname\
+$shell\
+$directory\
+$git_branch\
+$git_status\
+$golang\
+$rust\
+$nodejs\
+$bun\
+$docker_context\
+$cmd_duration\
+$line_break\
+$character\
+"""
 
-right_format = """$kubernetes$time"""
+right_format = """$time"""
 
-[character]
-success_symbol = "[❯](bold #A6E3A1)"
-error_symbol = "[❯](bold #F38BA8)"
-vimcmd_symbol = "[❮](bold #F9E2AF)"
+[palettes.macconfig]
+rosewater = "#f4dbd6"
+peach = "#f5a97f"
+yellow = "#eed49f"
+green = "#a6da95"
+teal = "#8bd5ca"
+sapphire = "#7dc4e4"
+text = "#cad3f5"
+subtext = "#b8c0e0"
+overlay = "#939ab7"
+surface = "#494d64"
+red = "#ed8796"
+
+[shell]
+disabled = false
+format = "[$indicator]($style) "
+fish_indicator = "fish"
+style = "bold subtext"
 
 [username]
-style_user = "bold #F2CDCD"
-style_root = "bold #F38BA8"
+style_user = "bold rosewater"
+style_root = "bold red"
 format = "[$user]($style)"
-show_always = true
+show_always = false
 
 [hostname]
 ssh_only = false
-format = "[@$hostname](bold #F2CDCD) "
+format = "[@$hostname](bold rosewater) "
 
 [directory]
-style = "bold #89B4FA"
-truncation_length = 4
-truncate_to_repo = true
-read_only = " 🔒"
+style = "bold yellow"
 format = "[$path]($style)[$read_only]($read_only_style) "
+truncation_length = 3
+fish_style_pwd_dir_length = 1
+truncate_to_repo = false
+read_only = " ro"
+read_only_style = "bold red"
 
 [git_branch]
-symbol = " "
-format = "on [$symbol$branch(:$remote_branch)](bold #CBA6F7) "
-truncation_length = 30
-truncation_symbol = "…"
+format = "[$branch]($style) "
+style = "bold peach"
 
 [git_status]
-format = '([$all_status$ahead_behind](bold #F9E2AF) )'
-conflicted = "⚡"
-ahead = "⇡${count}"
-behind = "⇣${count}"
-diverged = "⇕⇡${ahead_count}⇣${behind_count}"
-untracked = "?"
-stashed = "≡"
-modified = "!"
-staged = "+"
-renamed = "»"
-deleted = "✘"
+format = "[$all_status$ahead_behind]($style) "
+style = "bold red"
 
 [golang]
-symbol = " "
-format = "via [$symbol($version)](dimmed #89DCEB) "
-
-[nodejs]
-symbol = " "
-format = "via [$symbol($version)](dimmed #A6E3A1) "
+format = "[go $version]($style) "
+style = "bold sapphire"
 
 [rust]
-symbol = " "
-format = "via [$symbol($version)](dimmed #FAB387) "
+format = "[rs $version]($style) "
+style = "bold peach"
 
-[python]
-symbol = " "
-format = "via [$symbol($version)](dimmed #F9E2AF) "
+[nodejs]
+format = "[node $version]($style) "
+style = "bold green"
+
+[bun]
+format = "[bun $version]($style) "
+style = "bold green"
 
 [docker_context]
-symbol = " "
-only_with_files = true
-format = "via [$symbol$context](dimmed #89B4FA) "
-
-[cmd_duration]
-min_time = 2_000
-format = "took [$duration](bold #F9E2AF) "
+format = "[docker $context]($style) "
+style = "bold teal"
 
 [kubernetes]
-disabled = false
-symbol = "☸ "
-format = '[$symbol$context(\($namespace\))](bold #89DCEB)  '
-contexts = [
-  { context_pattern = "orbstack", style = "dimmed #89DCEB", symbol = "☸ " },
-]
+disabled = true
+
+[cmd_duration]
+min_time = 500
+format = "[took $duration]($style) "
+style = "bold overlay"
+
+[character]
+success_symbol = "[>](bold yellow)"
+error_symbol = "[>](bold red)"
+vimcmd_symbol = "[<](bold yellow)"
+vimcmd_replace_one_symbol = "[<](bold peach)"
+vimcmd_replace_symbol = "[<](bold peach)"
+vimcmd_visual_symbol = "[<](bold teal)"
 
 [time]
 disabled = false
-format = "[$time](#585B70)"
+format = "[$time](bold overlay)"
 time_format = "%H:%M:%S"
