@@ -156,6 +156,14 @@ alias drmi='docker rmi'
 alias dlog='docker logs -f'
 alias dvol='docker volume ls'
 
+alias tl='tmux ls'
+function ta --argument-names name
+    if test -z "$name"
+        set name main
+    end
+    tmux new-session -A -s $name
+end
+
 function timestamp
     set -l current_epoch (date +%s)
     set -l current_ms (math "$current_epoch * 1000")
